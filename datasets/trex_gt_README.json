@@ -1,0 +1,115 @@
+{
+  "design": "v2: labels drawn as y~Bernoulli(oracle(x)) from a known closed-form oracle in trex_gt_oracle.py, over UNCONDITIONALLY sampled features -- ground truth is the oracle function itself (exact necessity/sufficiency/insensitivity by construction), not a labeling convention a trained model is assumed to have learned. A trained XGBoost is fit per tier and checked for oracle_alignment before its explanations should be trusted against this ground truth.",
+  "seed": 0,
+  "n_train": 5000,
+  "n_test": 30,
+  "datasets": {
+    "single_driver": {
+      "true_driver": "f0 (single, individually sufficient)",
+      "n_rows": 5030,
+      "n_features": 20,
+      "outcome_rate": 0.5055666003976144,
+      "n_test": 30,
+      "xgb_oracle_alignment": {
+        "tier": "single_driver",
+        "mean_abs_err": 0.03638119623064995,
+        "max_abs_err": 0.1605510711669922,
+        "corr": 0.9945050993018386,
+        "aligned": true
+      },
+      "mlp_oracle_alignment": {
+        "tier": "single_driver",
+        "mean_abs_err": 0.027293048799037933,
+        "max_abs_err": 0.10625603795051575,
+        "corr": 0.9950037114641491,
+        "aligned": true
+      }
+    },
+    "double_driver_and": {
+      "true_driver": "f0 AND f1 jointly necessary (neither sufficient alone) -- smooth-AND oracle: gate(f0)*gate(f1)",
+      "n_rows": 5030,
+      "n_features": 20,
+      "outcome_rate": 0.2550695825049702,
+      "n_test": 30,
+      "xgb_oracle_alignment": {
+        "tier": "double_driver_and",
+        "mean_abs_err": 0.03384227305650711,
+        "max_abs_err": 0.1921805441379547,
+        "corr": 0.9926341507406764,
+        "aligned": true
+      },
+      "mlp_oracle_alignment": {
+        "tier": "double_driver_and",
+        "mean_abs_err": 0.028322620317339897,
+        "max_abs_err": 0.2213091254234314,
+        "corr": 0.9921012614750557,
+        "aligned": true
+      }
+    },
+    "complex_distractors": {
+      "true_driver": "f0 (single), 18 correlated non-discriminating distractors f1..f18 with exactly-zero oracle coefficient, softer gate = more label noise near the boundary",
+      "n_rows": 5030,
+      "n_features": 20,
+      "outcome_rate": 0.5055666003976144,
+      "n_test": 30,
+      "xgb_oracle_alignment": {
+        "tier": "complex_distractors",
+        "mean_abs_err": 0.03732294216752052,
+        "max_abs_err": 0.11703401803970337,
+        "corr": 0.9935544401837643,
+        "aligned": true
+      },
+      "mlp_oracle_alignment": {
+        "tier": "complex_distractors",
+        "mean_abs_err": 0.031822919845581055,
+        "max_abs_err": 0.1075812578201294,
+        "corr": 0.9944357693451478,
+        "aligned": true
+      }
+    },
+    "overdetermined_or": {
+      "true_driver": "f0 OR f1, each individually sufficient (redundant/overdetermined causes) -- smooth-OR oracle. Exact Halpern-Pearl degree of responsibility per row in resp_f0/resp_f1: 0.5 each when both actually high, 1/0 when only one is",
+      "n_rows": 5030,
+      "n_features": 20,
+      "outcome_rate": 0.7459244532803181,
+      "n_test": 30,
+      "xgb_oracle_alignment": {
+        "tier": "overdetermined_or",
+        "mean_abs_err": 0.028704436495900154,
+        "max_abs_err": 0.19663888216018677,
+        "corr": 0.9908105642576303,
+        "aligned": true
+      },
+      "mlp_oracle_alignment": {
+        "tier": "overdetermined_or",
+        "mean_abs_err": 0.05372752621769905,
+        "max_abs_err": 0.2542926073074341,
+        "corr": 0.974692607834703,
+        "aligned": true
+      },
+      "outcome1_both_hi_frac": 0.2463220675944334
+    },
+    "correlated_confounder": {
+      "true_driver": "f0 (true driver). f1 is a non-causal confounder constructed to correlate with f0 at r>0.9 but has exactly-zero oracle coefficient",
+      "n_rows": 5030,
+      "n_features": 20,
+      "outcome_rate": 0.4990059642147117,
+      "n_test": 30,
+      "xgb_oracle_alignment": {
+        "tier": "correlated_confounder",
+        "mean_abs_err": 0.020065419375896454,
+        "max_abs_err": 0.08143818378448486,
+        "corr": 0.9975229180660492,
+        "aligned": true
+      },
+      "mlp_oracle_alignment": {
+        "tier": "correlated_confounder",
+        "mean_abs_err": 0.049238890409469604,
+        "max_abs_err": 0.1274890899658203,
+        "corr": 0.9936523824154525,
+        "aligned": true
+      },
+      "driver_confound_corr": 0.9858003302598973
+    }
+  }
+}
